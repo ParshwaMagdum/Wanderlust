@@ -64,7 +64,7 @@ const sessionOptions ={
 };
 
 app.get("/", (req, res) => {
-    res.render("/listings");
+    res.redirect("/listings");
 });
 
 app.use(session(sessionOptions));
@@ -84,16 +84,6 @@ app.use((req,res,next) => {
     next();
 });
 
-// app.get("/getregister", async (req,res) => {
-//     let fakeUser= new User({
-//         email: "abc@getMaxListeners.com",
-//         username: "Rahul",
-//     });
-
-//     let registeredUser =await User.register(fakeUser,"helloworld");
-//     console.log(registeredUser);
-// });
-
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/",userRouter);
@@ -108,6 +98,7 @@ app.use((err,req,res,next) => {
     res.status(statusCode).render("error.ejs",{message});
 });
 
+const port = process.env.PORT || 8080;
 app.listen(8080, () =>{
     console.log("Server is working");
 });
