@@ -1,0 +1,42 @@
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#filters a{
+    text-decoration: none;
+}
+
+.filter {
+    color: #213C51;
+    text-align: center;
+    margin-right: 2.8rem;
+    margin-top: 2rem;
+    opacity: 0.7;
+}
+
+.filter:hover {
+    opacity: 3;
+    cursor: pointer;
+}
+
+.filter p {
+    font-size: 0.8rem;
+}
+
+.tax-info {
+    display: none;
+}
+
+.tax-toggle {
+    border: 1.5px solid black;
+    border-radius: 1.3rem;
+    font-size: .9rem;
+    height: 3.25rem;
+    width: 14rem;
+    padding: 1rem;
+    /* margin-left: 3rem; */
+    display: flex;
+    align-items: center;
+}
