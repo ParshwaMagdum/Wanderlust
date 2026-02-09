@@ -29,6 +29,10 @@
     display: none;
 }
 
+.show-tax .tax-info {
+    display: inline;
+}
+
 .tax-toggle {
     border: 1.5px solid black;
     border-radius: 1.3rem;

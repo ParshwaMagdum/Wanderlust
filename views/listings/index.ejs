@@ -3,119 +3,144 @@
     <body>
         <div id="filters">
 
-            <a href="/listings" class="filter-link <%= !category ? 'active' : '' %>">
+            <a href="/listings<%= search ? `?search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= !category ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-border-all"></i></div>
                     <p>All</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Trending" class="filter-link">
+            <a href="/listings?category=Trending<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Trending' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-fire"></i></div>
                     <p>Trending</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Rooms" class="filter-link">
+            <a href="/listings?category=Rooms<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Rooms' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-bed"></i></div>
                     <p>Rooms</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Iconic Cities" class="filter-link">
+            <a href="/listings?category=Iconic Cities<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Iconic Cities' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-mountain-city"></i></div>
                     <p>Iconic Cities</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Mountain" class="filter-link">
+            <a href="/listings?category=Mountain<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Mountain' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-mountain"></i></div>
                     <p>Mountain</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Beach" class="filter-link">
+            <a href="/listings?category=Beach<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Beach' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-umbrella-beach"></i></div>
                     <p>Beach</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Castles" class="filter-link">
+            <a href="/listings?category=Castles<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Castles' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-brands fa-fort-awesome"></i></div>
                     <p>Castles</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Amazing Pools" class="filter-link">
+            <a href="/listings?category=Amazing Pools<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Amazing Pools' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-person-swimming"></i></div>
                     <p>Amazing Pools</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Camping" class="filter-link">
+            <a href="/listings?category=Camping<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Camping' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-tents"></i></div>
                     <p>Camping</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Artic" class="filter-link">
+            <a href="/listings?category=Artic<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Artic' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-snowflake"></i></div>
                     <p>Artic</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Boats" class="filter-link">
+            <a href="/listings?category=Boats<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Boats' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-sailboat"></i></div>
                     <p>Boats</p>
                 </div>
             </a>
 
-            <a href="/listings?category=Domes" class="filter-link">
+            <a href="/listings?category=Domes<%= search ? `&search=${encodeURIComponent(search)}` : '' %>"
+                class="filter-link <%= category === 'Domes' ? 'active' : '' %>">
                 <div class="filter">
                     <div><i class="fa-solid fa-igloo"></i></div>
                     <p>Domes</p>
                 </div>
             </a>
 
-
-            <div class="tax-toggle">
-                <div class="form-check-reverse form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                    <label class="form-check-label" for="switchCheckDefault">Display rate after taxes</label>
-                </div>
+            <div class="tax-toggle"> 
+                <div class="form-check-reverse form-switch"> 
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"> 
+                    <label class="form-check-label" for="switchCheckDefault">Display rate after taxes</label> 
+                </div> 
             </div>
 
         </div>
 
+
         <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-            <% for(let listing of allListings){ %>
-                <a href="/listings/<%= listing._id %>" class="listing-link">
-                    <div class="card col listing-card">
-                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image"
-                            style="height: 20rem;">
-                        <div class="card-img-overlay"></div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <b>
-                                    <%= listing.title %>
-                                </b> <br>
-                                &#8377;<%= listing.price.toLocaleString("en-IN") %> / night
-                                    <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
-                            </p>
-                        </div>
-                    </div>
-                </a>
-                <% } %>
+
+            <% if (allListings.length===0) { %>
+                <div class="col-12 text-center mt-5">
+                    <h5 class="text-muted">No listings found</h5>
+                    <p class="text-muted">
+                        Try changing the search or category filter.
+                    </p>
+                </div>
+                <% } else { %>
+
+                    <% for(let listing of allListings){ %>
+                        <a href="/listings/<%= listing._id %>" class="listing-link">
+                            <div class="card col listing-card">
+                                <img src="<%= listing.image.url %>" class="card-img-top" style="height: 20rem;">
+                                <div class="card-img-overlay"></div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <b>
+                                            <%= listing.title %>
+                                        </b><br>
+                                        &#8377;<%= listing.price.toLocaleString("en-IN") %> / night
+                                        <i class="tax-info"> &nbsp; +18% GST</i>
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                        <% } %>
+
+                            <% } %>
+
         </div>
+
 
     </body>
