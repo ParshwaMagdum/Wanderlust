@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
@@ -11,7 +11,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
-const MongoStore = require("connect-mongo").default ;
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -23,7 +23,7 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const dbUrl=process.env.ATLASDB_URL;
+const dbUrl = process.env.ATLASDB_URL;
 
 
 main()
@@ -36,15 +36,15 @@ main()
 
 
 async function main() {
-  await mongoose.connect(dbUrl);
+    await mongoose.connect(dbUrl);
 }
 
-app.set("view engine","ejs");
-app.set("views", path.join(__dirname,"views"));
-app.use(express.urlencoded({extended: true}));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
-app.use(express.static(path.join(__dirname,"/public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
@@ -54,13 +54,13 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
 });
 
-const sessionOptions ={
+const sessionOptions = {
     store,
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        expires: Date.now()+ 7 * 24 * 60 * 60 * 1000,
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true
     },
@@ -80,35 +80,39 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/google/callback"
+    callbackURL:
+        process.env.NODE_ENV === "production"
+            ? "https://wanderlust.vercel.app/auth/google/callback"
+            : "http://localhost:8080/auth/google/callback"
+
 },
-async (accessToken, refreshToken, profile, done) => {
-    try {
-        let existingUser = await User.findOne({ googleId: profile.id });
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            let existingUser = await User.findOne({ googleId: profile.id });
 
-        if (existingUser) {
-            return done(null, existingUser);
+            if (existingUser) {
+                return done(null, existingUser);
+            }
+
+            const newUser = new User({
+                username: profile.displayName,
+                email: profile.emails[0].value,
+                googleId: profile.id
+            });
+
+            await newUser.save();
+            return done(null, newUser);
+
+        } catch (err) {
+            return done(err, null);
         }
-
-        const newUser = new User({
-            username: profile.displayName,
-            email: profile.emails[0].value,
-            googleId: profile.id
-        });
-
-        await newUser.save();
-        return done(null, newUser);
-
-    } catch (err) {
-        return done(err, null);
-    }
-}));
+    }));
 
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next) => {
+app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
@@ -118,19 +122,18 @@ app.use((req,res,next) => {
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
-app.use("/",userRouter);
+app.use("/", userRouter);
 
 
 app.use((req, res, next) => {
-    next(new ExpressError(404,"Page Not Found!"));
+    next(new ExpressError(404, "Page Not Found!"));
 });
 
-app.use((err,req,res,next) => {
-    let {statusCode = 500, message = "Something went wrong"} = err;
-    res.status(statusCode).render("error.ejs",{message});
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Something went wrong" } = err;
+    res.status(statusCode).render("error.ejs", { message });
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, () =>{
-    console.log("Server is working");
-});
+
+
+module.exports = app;
