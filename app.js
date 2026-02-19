@@ -134,6 +134,12 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render("error.ejs", { message });
 });
 
+if (process.env.NODE_ENV !== "production") {
+    const port = 8080;
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    });
+}
 
 
 module.exports = app;
